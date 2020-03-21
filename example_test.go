@@ -21,4 +21,6 @@ func ExampleMaxSlice() {
     d := []int{1,2,3,4}
     max := utils.MaxSlice(d)
     fmt.Println(max)
+    //Output:
+    //4
 }
