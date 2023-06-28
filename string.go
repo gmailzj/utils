@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"unicode/utf8"
 )
 
 func GetEmptyString() string {
@@ -83,4 +84,42 @@ func RandomString(ln int) string {
 		b[i] = letters[r.Intn(len(letters))]
 	}
 	return string(b)
+}
+
+// Substr => php substr("hello world", start, length);
+func Substr(str string, start int, length int) string {
+	return str[start : start+length]
+}
+
+// MbSubstr => PHP mb_substr
+func MbSubstr(str string, start int, length int) string {
+	return string([]rune(str)[start : start+length])
+}
+
+// MbStrpos => PHP mb_strpos
+func MbStrpos(haystack, needle string) int {
+	index := strings.Index(haystack, needle)
+	if index == -1 || index == 0 {
+		return index
+	}
+	pos := 0
+	total := 0
+	reader := strings.NewReader(haystack)
+	for {
+		_, size, err := reader.ReadRune()
+		if err != nil {
+			return -1
+		}
+		total += size
+		pos++
+		// got it
+		if total == index {
+			return pos
+		}
+	}
+}
+
+// MbStrlen => PHP mb_strlen
+func MbStrlen(str string) int {
+	return utf8.RuneCountInString(str)
 }
